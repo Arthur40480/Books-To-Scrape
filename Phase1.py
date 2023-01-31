@@ -20,9 +20,6 @@ heading = [
     "review_rating",
     "image_url"
 ]
-# Création du dossier book_data si celui-ci n'est pas déjà créer:
-if not os.path.isdir('product\\book_data'):
-    os.system('mkdir product\\book_data')
 
 # Fonction pour récupérer les données d'un livre.
 def extract_datas_book(url):
@@ -58,8 +55,14 @@ def extract_datas_book(url):
     print(fiction_book)
 
     # On appelle les fonctions create_csv_file et extract_img_product:
+    create_folder()
     create_csv_file(fiction_book, heading)
     extract_img_product(category, image)
+
+# Fonction pour créer un dossier book_data si celui-ci n'est pas déjà créer:
+def create_folder():
+    if not os.path.isdir('product\\book_data'):
+        os.system('mkdir product\\book_data')
 
 # Fonction pour créer un fichier csv, et y enregistrer les données du livre.
 def create_csv_file(fiction_book, heading):
