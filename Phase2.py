@@ -1,10 +1,12 @@
 # Importation des librairies
+import os
 import requests
 from bs4 import BeautifulSoup
 import csv
 
 # Phase 2
 url_category_fiction = "http://books.toscrape.com/catalogue/category/books/fiction_10/index.html"
+
 
 # Création d'une liste pour les en-têtes:
 heading = [
@@ -20,8 +22,15 @@ heading = [
     "image_url"
 ]
 
+
+# Fonction pour créer un dossier fiction_data si celui-ci n'est pas déjà créer:
+def create_folder():
+    if not os.path.isdir('product\\fiction_data'):
+        os.system('mkdir product\\fiction_data')
+
+
 # Fonction pour récupérer les URLS de chaque page de la catégorie "Fiction".
-def get_url_page(url):
+def get_url_page(url, heading):
     pages_url = []
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
@@ -34,10 +43,11 @@ def get_url_page(url):
             pages_url.append(url_page)
     if not current_page:
         pages_url.append(url)
-    extract_url_book(pages_url)
+    extract_url_book(pages_url, heading)
+
 
 # Fonction pour récupérer les URLS de chaque livre de la catégorie "Fiction".
-def extract_url_book(url_fiction_page):
+def extract_url_book(url_fiction_page, heading):
     url_book_fiction = []
     for page in url_fiction_page:
         r = requests.get(page)
@@ -48,13 +58,15 @@ def extract_url_book(url_fiction_page):
             base_url = "http://books.toscrape.com/catalogue/"
             full_url = (base_url + fiction_url)
             url_book_fiction.append(full_url)
-    extract_datas_book(url_book_fiction)
+    extract_datas_book(url_book_fiction, heading)
     return url_book_fiction
 
+
 # Fonction pour récupérer les données de chaque livre de la catégorie "Fiction".
-def extract_datas_book(url_book_fiction):
-    all_fiction_book = []
+def extract_datas_book(url_book_fiction, heading):
+    nbr = 0
     for datas in url_book_fiction:
+        nbr = nbr + 1
         page = requests.get(datas)
         soup = BeautifulSoup(page.content, "html.parser")
         datas_book = soup.find_all("td")
@@ -84,44 +96,40 @@ def extract_datas_book(url_book_fiction):
             "review_rating": review_rating,
             "image_url": image
         }
-        all_fiction_book.append(fiction_book)
-        create_csv_file(all_fiction_book, fiction_book, heading)
+        create_csv_file(fiction_book, category, heading)
+        extract_img_product(title, image)
+
 
 # Fonction pour créer un fichier csv, et y enregistrer les données du livre.
-def create_csv_file(all_fiction_book, fiction_book, heading):
-    init = 0
-    for book in all_fiction_book:
-        if init == 0:
-            with open('data.csv', 'w')as fichier_csv:
-                writer = csv.writer(fichier_csv, delimiter=",")
-                writer.writerow(heading)
-                writer.writerow([
-                    book["product_page_url"],
-                    book["universal_product_code"],
-                    book["title"],
-                    book["price_including_tax"],
-                    book["price_excluding_tax"],
-                    book["number_available"],
-                    book["product_description"],
-                    book["category"],
-                    book["review_rating"],
-                    book["image_url"]
-                ])
-            init = 1
-        else:
-            with open('data.csv', 'a')as fichier_csv:
-                writer = csv.writer(fichier_csv, delimiter=",")
-                writer.writerow([
-                    book["product_page_url"],
-                    book["universal_product_code"],
-                    book["title"],
-                    book["price_including_tax"],
-                    book["price_excluding_tax"],
-                    book["number_available"],
-                    book["product_description"],
-                    book["category"],
-                    book["review_rating"],
-                    book["image_url"]
-                ])
+def create_csv_file(fiction_book, category, heading):
+    with open('product\\fiction_data\\' + category + '.csv', 'a') as fichier_csv:
+        writer = csv.writer(fichier_csv, delimiter=",")
+        writer.writerow(heading)
+        writer.writerow([
+            fiction_book["product_page_url"],
+            fiction_book["universal_product_code"],
+            fiction_book["title"],
+            fiction_book["price_including_tax"],
+            fiction_book["price_excluding_tax"],
+            fiction_book["number_available"],
+            fiction_book["product_description"],
+            fiction_book["category"],
+            fiction_book["review_rating"],
+            fiction_book["image_url"]
+        ])
 
-get_url_page(url_category_fiction)
+
+# Fonction pour télécharger les images à partir de leurs URLS:
+def extract_img_product(title, url):
+    if not os.path.isdir('product\\fiction_data\\fiction_img'):
+        os.system('mkdir product\\fiction_data\\fiction_img')
+    f = open('product\\fiction_data\\fiction_img\\' + title.replace(":", "").replace("/", " ").replace('"', '').replace(
+        'Ã©', 'é').replace(",", "").replace(".", "").replace("&", "").replace("*", "").replace("?", "") + ".jpg", 'wb')
+    print(f)
+    reponse_img = requests.get(url)
+    f.write(reponse_img.content)
+    f.close()
+
+
+create_folder()
+get_url_page(url_category_fiction, heading)
