@@ -96,8 +96,11 @@ def extract_datas_book(url_book_fiction, heading):
             "review_rating": review_rating,
             "image_url": image
         }
+        title_folder = title.replace(":", "").replace("/", " ").replace('"', '').replace(" ", "").replace(
+        'Ã©', 'é').replace(",", "").replace(".", "").replace("&", "").replace("*", "").replace("?", "").replace("#", "")
+
         create_csv_file(fiction_book, category, heading)
-        extract_img_product(title, image)
+        extract_img_product(title_folder, image)
 
 
 # Fonction pour créer un fichier csv, et y enregistrer les données du livre.
@@ -122,10 +125,8 @@ def create_csv_file(fiction_book, category, heading):
 # Fonction pour télécharger les images à partir de leurs URLS:
 def extract_img_product(title, url):
     if not os.path.isdir('product\\fiction_data\\fiction_img'):
-        os.system('mkdir product\\fiction_data\\fiction_img')
-    f = open('product\\fiction_data\\fiction_img\\' + title.replace(":", "").replace("/", " ").replace('"', '').replace(
-        'Ã©', 'é').replace(",", "").replace(".", "").replace("&", "").replace("*", "").replace("?", "") + ".jpg", 'wb')
-    print(f)
+        os.mkdir('product\\fiction_data\\fiction_img')
+    f = open('product\\fiction_data\\fiction_img\\' + title + ".jpg", 'wb')
     reponse_img = requests.get(url)
     f.write(reponse_img.content)
     f.close()
