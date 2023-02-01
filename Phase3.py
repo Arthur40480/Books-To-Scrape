@@ -1,4 +1,5 @@
 # Importation des librairies
+import os
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -6,6 +7,29 @@ import csv
 # Phase 3
 url_category = []
 name_category = []
+
+# Création d'une liste pour les en-têtes:
+heading = [
+    "product_page_url",
+    "universal_product_code",
+    "title",
+    "price_including_tax",
+    "price_excluding_tax",
+    "number_available",
+    "product_description",
+    "category",
+    "review_rating",
+    "image_url"
+]
+
+# Fonction pour créer un dossier category_data si celui-ci n'est pas déjà créer:
+def create_folder(list):
+    if not os.path.isdir('product\\category_data'):
+        os.system('mkdir product\\category_data')
+    for name in list:
+        str(name)
+        if not os.path.isdir('product\\category_data\\' + name):
+            os.mkdir('product\\category_data\\' + name)
 
 # Fonction qui vient extraire toutes les urls des catégories de livres disponibles.
 def get_all_category():
@@ -40,6 +64,7 @@ def get_url_page(url):
         pages_url.append(url)
     extract_url_book(pages_url)
 
+
 # Fonction qui viens extraire l'url de chaque livre, dans chaque catégorie de livre.
 def extract_url_book(url_fiction_page):
     url_book_fiction = []
@@ -54,9 +79,10 @@ def extract_url_book(url_fiction_page):
             url_book_fiction.append(full_url)
     extract_datas_book(url_book_fiction)
 
+
 # Fonction pour récupérer les données de chaque livre de chaque catégorie du site.
 def extract_datas_book(url_book_fiction):
-    all_fiction_book = []
+    all_book = []
     csv_init = 0
     for datas in url_book_fiction:
         page = requests.get(datas)
@@ -88,23 +114,12 @@ def extract_datas_book(url_book_fiction):
             "review_rating": review_rating,
             "image_url": image
         }
-        all_fiction_book.append(fiction_book)
+        all_book.append(fiction_book)
+        title_folder = title.replace(":", "").replace("/", " ").replace('"', '').replace(" ", "").replace(
+        'Ã©', 'é').replace(",", "").replace(".", "").replace("&", "").replace("*", "").replace("?", "").replace("#", "")
 
-        # Création d'une liste pour les en-têtes:
-        heading = [
-            "product_page_url",
-            "universal_product_code",
-            "title",
-            "price_including_tax",
-            "price_excluding_tax",
-            "number_available",
-            "product_description",
-            "category",
-            "review_rating",
-            "image_url"
-        ]
         if (csv_init == 0):
-            with open(category + '.csv', 'w') as fichier_csv:
+            with open('product\\category_data\\' + str(category) + '\\' + title_folder + '.csv', 'w', encoding="utf-8") as fichier_csv:
                 writer = csv.writer(fichier_csv, delimiter=',')
                 writer.writerow(heading)
                 writer.writerow([
@@ -121,7 +136,7 @@ def extract_datas_book(url_book_fiction):
                 ])
             csv_init = 1
         else:
-            with open(category + '.csv', 'a') as fichier_csv:
+            with open('product\\category_data\\' + str(category) + '\\' + title_folder + '.csv', 'a', encoding="utf-8") as fichier_csv:
                 writer = csv.writer(fichier_csv, delimiter=',')
                 writer.writerow([
                     product_page_url,
@@ -135,9 +150,22 @@ def extract_datas_book(url_book_fiction):
                     review_rating,
                     image
                 ])
+        extract_img_product(category, title_folder, image)
+def extract_img_product(category, title, url):
+    if not os.path.isdir('product\\category_data\\' + str(category) + '\\' + str(category) + '_img'):
+        os.mkdir('product\\category_data\\' + str(category) + '\\' + str(category) + '_img')
+    f = open('product\\category_data\\' + str(category) + '\\' + str(category) + '_img\\' + title + ".jpg", 'wb')
+    print(f)
+    reponse_img = requests.get(url)
+    f.write(reponse_img.content)
+    f.close()
 
 get_all_category()
+
 del url_category[0]
+del name_category[0]
+
+create_folder(name_category)
 
 for url in url_category:
     get_url_page(url)
