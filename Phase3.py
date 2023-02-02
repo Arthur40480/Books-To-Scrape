@@ -24,12 +24,12 @@ heading = [
 
 # Fonction pour créer un dossier category_data si celui-ci n'est pas déjà créer:
 def create_folder(list):
-    if not os.path.isdir('product\\category_data'):
-        os.system('mkdir product\\category_data')
+    if not os.path.exists('product/category_data'):
+        os.makedirs('product/category_data')
     for name in list:
         str(name)
-        if not os.path.isdir('product\\category_data\\' + name):
-            os.mkdir('product\\category_data\\' + name)
+        if not os.path.exists('product/category_data/' + name):
+            os.makedirs('product/category_data/' + name)
 
 # Fonction qui vient extraire toutes les urls des catégories de livres disponibles.
 def get_all_category():
@@ -119,7 +119,7 @@ def extract_datas_book(url_book_fiction):
         'Ã©', 'e').replace(",", "").replace(".", "").replace("&", "").replace("*", "").replace("?", "").replace("#", "")
 
         if (csv_init == 0):
-            with open('product\\category_data\\' + str(category) + '\\' + str(category) + '.csv', 'w', encoding="utf-8") as fichier_csv:
+            with open('./product/category_data/' + str(category) + '/' + str(category) + '.csv', 'w', encoding="utf-8") as fichier_csv:
                 writer = csv.writer(fichier_csv, delimiter=',')
                 writer.writerow(heading)
                 writer.writerow([
@@ -136,7 +136,7 @@ def extract_datas_book(url_book_fiction):
                 ])
             csv_init = 1
         else:
-            with open('product\\category_data\\' + str(category) + '\\' + str(category) + '.csv', 'a', encoding="utf-8") as fichier_csv:
+            with open('./product/category_data/' + str(category) + '/' + str(category) + '.csv', 'a', encoding="utf-8") as fichier_csv:
                 writer = csv.writer(fichier_csv, delimiter=',')
                 writer.writerow([
                     product_page_url,
@@ -152,9 +152,9 @@ def extract_datas_book(url_book_fiction):
                 ])
         extract_img_product(category, title_folder, image)
 def extract_img_product(category, title, url_img):
-    if not os.path.isdir('product\\category_data\\' + str(category) + '\\' + str(category) + '_img'):
-        os.mkdir('product\\category_data\\' + str(category) + '\\' + str(category) + '_img')
-    f = open('product\\category_data\\' + str(category) + '\\' + str(category) + '_img\\' + title + ".jpg", 'wb')
+    if not os.path.exists('./product/category_data/' + str(category) + '/' + str(category) + '_img'):
+        os.makedirs('./product/category_data/' + str(category) + '/' + str(category) + '_img')
+    f = open('./product/category_data/' + str(category) + '/' + str(category) + '_img/' + title + ".jpg", 'wb')
     print(f)
     reponse_img = requests.get(url_img)
     f.write(reponse_img.content)
@@ -169,5 +169,3 @@ create_folder(name_category)
 
 for url in url_category:
     get_url_page(url)
-
-
