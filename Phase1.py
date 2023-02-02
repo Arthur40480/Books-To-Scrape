@@ -93,3 +93,5 @@ def extract_img_product(title, url):
 # On apelle la fonction extract_datas_book pour lancer le script:
 extract_datas_book(url_fiction_book)
 
+print("Téléchargement terminé avec succès !")
+

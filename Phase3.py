@@ -30,6 +30,7 @@ def create_folder(list):
         str(name)
         if not os.path.exists('product/category_data/' + name):
             os.makedirs('product/category_data/' + name)
+            os.makedirs('product/category_data/' + name + '/' + name + '_img')
 
 # Fonction qui vient extraire toutes les urls des catégories de livres disponibles.
 def get_all_category():
@@ -150,12 +151,10 @@ def extract_datas_book(url_book_fiction):
                     review_rating,
                     image
                 ])
-        extract_img_product(category, title_folder, image)
+        extract_img_product(category, universal_product_code, image)
 def extract_img_product(category, title, url_img):
-    if not os.path.exists('./product/category_data/' + str(category) + '/' + str(category) + '_img'):
-        os.makedirs('./product/category_data/' + str(category) + '/' + str(category) + '_img')
-    f = open('./product/category_data/' + str(category) + '/' + str(category) + '_img/' + title + ".jpg", 'wb')
-    print(f)
+    print(title)
+    f = open('product/category_data/' + str(category) + '/' + str(category) + '_img/' + title + ".jpg", 'wb')
     reponse_img = requests.get(url_img)
     f.write(reponse_img.content)
     f.close()
@@ -169,3 +168,5 @@ create_folder(name_category)
 
 for url in url_category:
     get_url_page(url)
+
+print("Téléchargement terminé avec succès !")

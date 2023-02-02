@@ -134,3 +134,5 @@ def extract_img_product(title, url):
 
 create_folder()
 get_url_page(url_category_fiction, heading)
+
+print("Téléchargement terminé avec succès !")
