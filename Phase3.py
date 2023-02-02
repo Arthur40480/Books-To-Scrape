@@ -115,11 +115,11 @@ def extract_datas_book(url_book_fiction):
             "image_url": image
         }
         all_book.append(fiction_book)
-        title_folder = title.replace(":", "").replace("/", " ").replace('"', '').replace(" ", "").replace(
-        'Ã©', 'é').replace(",", "").replace(".", "").replace("&", "").replace("*", "").replace("?", "").replace("#", "")
+        title_folder = title.replace(":", "").replace("-", "").replace("é", "e").replace("/", " ").replace('"', '').replace(" ", "").replace(
+        'Ã©', 'e').replace(",", "").replace(".", "").replace("&", "").replace("*", "").replace("?", "").replace("#", "")
 
         if (csv_init == 0):
-            with open('product\\category_data\\' + str(category) + '\\' + title_folder + '.csv', 'w', encoding="utf-8") as fichier_csv:
+            with open('product\\category_data\\' + str(category) + '\\' + str(category) + '.csv', 'w', encoding="utf-8") as fichier_csv:
                 writer = csv.writer(fichier_csv, delimiter=',')
                 writer.writerow(heading)
                 writer.writerow([
@@ -136,7 +136,7 @@ def extract_datas_book(url_book_fiction):
                 ])
             csv_init = 1
         else:
-            with open('product\\category_data\\' + str(category) + '\\' + title_folder + '.csv', 'a', encoding="utf-8") as fichier_csv:
+            with open('product\\category_data\\' + str(category) + '\\' + str(category) + '.csv', 'a', encoding="utf-8") as fichier_csv:
                 writer = csv.writer(fichier_csv, delimiter=',')
                 writer.writerow([
                     product_page_url,
@@ -151,12 +151,12 @@ def extract_datas_book(url_book_fiction):
                     image
                 ])
         extract_img_product(category, title_folder, image)
-def extract_img_product(category, title, url):
+def extract_img_product(category, title, url_img):
     if not os.path.isdir('product\\category_data\\' + str(category) + '\\' + str(category) + '_img'):
         os.mkdir('product\\category_data\\' + str(category) + '\\' + str(category) + '_img')
     f = open('product\\category_data\\' + str(category) + '\\' + str(category) + '_img\\' + title + ".jpg", 'wb')
     print(f)
-    reponse_img = requests.get(url)
+    reponse_img = requests.get(url_img)
     f.write(reponse_img.content)
     f.close()
 
