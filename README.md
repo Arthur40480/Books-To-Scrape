@@ -20,19 +20,19 @@
 
  :two:  On viens dézipper l'ensemble de notre repo dans un nouveau dossier que l'on appellera *_Scrapping_*  
 
- :three:  Il vas falloir créer un environement virtuel. A l'aide du terminal, on viens choisir notre nouveau dossier :arrow_down:  
+ :three:  Il va falloir créer un environnement virtuel. A l'aide du terminal, on vient choisir notre nouveau dossier :arrow_down:  
 ```
  cd Scrapping
 
 ```
-On créer ensuite notre environement virtuel :arrow_down:
+On créé ensuite notre environement virtuel :arrow_down:
 ```
  python -m venv <environment name>
 
 ```
-Notez que <environment name>  est un nom que vous choississez, mais par convention, il est conseiller d'utiliser *_env_*  
+Notez que <environment name>  est un nom que vous choississez, mais par convention, il est conseillé d'utiliser *_env_*  
 
-:four: Une fois l'environement mis en place, il nous faut l'activer :arrow_down:
+:four: Une fois l'environnement mis en place, il nous faut l'activer :arrow_down:
 ```
  .//env/Scripts/activate.ps1
 
@@ -43,7 +43,7 @@ Normalement, lors de l'activation vous devriez voir (env) devant le chemin :arro
 
 ```
 
-:five: Il faut ensuite télécharger les librairies nécessaire depuis *requirements.txt* :arrow_down: 
+:five: Il faut ensuite télécharger les librairies nécessaires depuis *requirements.txt* :arrow_down: 
 ```
  pip install -r requirements.text
 
@@ -51,19 +51,19 @@ Normalement, lors de l'activation vous devriez voir (env) devant le chemin :arro
 
 ### Nous pouvons maintenant lancer le script Python :rocket:  
 
-Le script *Phase1.py* nous permet de récupérer les données d'un livre, enregistrer dans un fichier csv, ainsi que sont illustration en jpg :arrow_down:
+Le script *Phase1.py* nous permet de récupérer les données d'un livre, enregistrer dans un fichier csv, ainsi que son illustration en jpg :arrow_down:
 ```
  python Phase1.py
 
 ```
 
-Le script *Phase2.py* nous permet de récupérer les données d'une catégorie de livre enregistrer dans un fichier csv, ainsi que leurs illustrations en jpg :arrow_down:
+Le script *Phase2.py* nous permet de récupérer les données d'une catégorie de livres enregistrées dans un fichier csv, ainsi que leurs illustrations en jpg :arrow_down:
 ```
  python Phase2.py
 
 ```
 
-Le script *Phase3.py* nous permet de récupérer les données de l'ensemble des catégories de livre enregistrer dans un fichier csv, ainsi que leurs illustrations en jpg :arrow_down:
+Le script *Phase3.py* nous permet de récupérer les données de l'ensemble des catégories de livres enregistrées dans un fichier csv, ainsi que leurs illustrations en jpg :arrow_down:
 ```
  python Phase3.py
 
