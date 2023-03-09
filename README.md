@@ -5,7 +5,7 @@
 
 *_Python :snake: :_* version 3.10
 
-*_Les librairies Python  :closed_book: :_*  
+### Les librairies Python  :closed_book: :    
     beautifulsoup4==4.11.1  
     certifi==2022.12.7  
     charset-normalizer==3.0.1  
